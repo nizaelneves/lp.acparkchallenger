@@ -1107,6 +1107,123 @@
         font-size: 22px
       }
     }
+
+    /* ══════════════════════════════════════════════════════════════════
+       MOBILE — RESPONSIVIDADE GERAL (portrait + pseudo-fullscreen)
+       Sem depender de orientation lock (não funciona no iOS Safari)
+    ══════════════════════════════════════════════════════════════════ */
+
+    /* ── Dots de progresso: versão compacta para caber 12 questões ── */
+    @media (pointer: coarse) {
+      .ge-dot {
+        width: 20px;
+        height: 20px;
+        font-size: 9px
+      }
+      /* Remove linha conectora — economiza ~110px para 12 dots */
+      .ge-dot::before {
+        display: none
+      }
+      .ge-progress-dots {
+        gap: 3px;
+        flex-wrap: nowrap;
+        overflow: hidden; /* failsafe: nunca extrapola */
+        max-width: calc(100% - 56px) /* espaço para botão SAIR */
+      }
+      .ge-btn-exit {
+        flex-shrink: 0;
+        white-space: nowrap
+      }
+    }
+
+    /* ── Screen de jogo: padding reduzido + fontes ajustadas ── */
+    @media (pointer: coarse) and (max-width: 540px) {
+      #screen-game {
+        padding: 12px 14px
+      }
+      .ge-game-header {
+        gap: 8px;
+        margin-bottom: 10px;
+        align-items: center
+      }
+      .ge-question-text {
+        font-size: clamp(11px, 3.2vw, 16px);
+        max-width: 68%
+      }
+      .ge-timer-box {
+        font-size: clamp(13px, 3vw, 18px);
+        min-width: 66px;
+        padding: 4px 8px
+      }
+      .ge-answers-grid {
+        gap: 7px;
+        margin-bottom: 8px
+      }
+      .ge-answer-btn {
+        padding: 10px 12px;
+        font-size: clamp(11px, 3vw, 13px)
+      }
+      .ge-game-footer {
+        padding-top: 6px;
+        gap: 6px
+      }
+    }
+
+    /* ── Start screen: compactar em portrait mobile ── */
+    @media (pointer: coarse) and (max-width: 540px) {
+      #screen-start {
+        padding: 20px 16px;
+        gap: 4px
+      }
+      .ge-start-title {
+        font-size: clamp(26px, 7vw, 40px)
+      }
+      .ge-start-subtitle {
+        font-size: clamp(11px, 3vw, 14px);
+        margin: 8px auto 16px
+      }
+      .ge-qmarks {
+        margin: 4px 0 8px
+      }
+    }
+
+    /* ── Result screen em mobile portrait ── */
+    @media (pointer: coarse) and (max-width: 540px) {
+      #screen-result {
+        padding: 16px 14px
+      }
+      .ge-result-title {
+        font-size: clamp(20px, 5.5vw, 30px)
+      }
+      .ge-result-score {
+        font-size: clamp(32px, 8vw, 50px);
+        margin: 6px 0
+      }
+      .ge-result-msg {
+        font-size: clamp(12px, 3vw, 15px);
+        margin-bottom: 10px
+      }
+      .ge-result-breakdown {
+        gap: 6px;
+        margin-bottom: 10px
+      }
+      .ge-rb-item {
+        padding: 5px 9px;
+        font-size: 12px
+      }
+      .ge-result-meme {
+        width: 140px
+      }
+    }
+
+    /* ── Rotate hint: mais proeminente ── */
+    #ge-rotate-hint .hint-phone {
+      width: 80px;
+      height: 80px
+    }
+    #ge-rotate-hint p {
+      font-size: clamp(18px, 5vw, 26px)
+    }
   </style>
 </head>
 
@@ -2198,7 +2315,7 @@
       hint.classList.remove('fading');
       hint.classList.add('visible');
       clearTimeout(_hintDismissTimer);
-      _hintDismissTimer = setTimeout(dismissRotateHint, 4000);
+      _hintDismissTimer = setTimeout(dismissRotateHint, 7000);
     }
 
     function dismissRotateHint() {
@@ -2233,6 +2350,7 @@
       _rotateHintShown = false;
       clearTimeout(_hintDismissTimer);
       document.body.classList.add('ge-pseudo-fullscreen');
+
       /* Tenta native fullscreen (Android Chrome) + lock landscape */
       if (hasFullscreenApi()) {
         requestNativeFullscreen().then(function () {
@@ -2245,8 +2363,15 @@
         /* Sem Fullscreen API (iOS Safari) — tenta orientation lock diretamente */
         lockLandscape();
       }
-      /* Aguarda o fullscreen + orientation lock estabilizarem antes de checar */
-      setTimeout(checkRotateHint, 700);
+
+      /* Mostra o hint de girar IMEDIATAMENTE se estiver em portrait,
+         sem aguardar callbacks que podem não chegar no iOS */
+      var isPortraitNow = window.innerHeight > window.innerWidth;
+      if (isPortraitNow) {
+        showRotateHint();
+      }
+      /* Checagem secundária após as APIs resolverem */
+      setTimeout(checkRotateHint, 800);
     }
 
     /* ── MOBILE: sair do pseudo-fullscreen ── */

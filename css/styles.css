@@ -1499,11 +1499,20 @@ details[open] .faq-question::after {
 @media (max-width: 767px) {
   .new-game-section {
     padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .new-game-container {
+    padding: 0;
+    gap: 24px;
+  }
+  .new-game-info {
+    padding: 0 16px;
   }
   .new-game-visual {
-    margin-left: -24px;
-    margin-right: -24px;
-    width: calc(100% + 48px);
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
     max-width: none;
   }
   .new-game-card {
@@ -1513,6 +1522,19 @@ details[open] .faq-question::after {
     box-shadow: none;
     border-left: none;
     border-right: none;
+  }
+}
+
+/* ── Telas muito pequenas (≤ 360px) ── */
+@media (max-width: 360px) {
+  .new-game-section {
+    padding-top: 48px;
+  }
+  .game-info-title {
+    font-size: 1.1rem;
+  }
+  .game-rule-text {
+    font-size: 0.82rem;
   }
 }
 
