@@ -871,6 +871,18 @@
       display: none !important
     }
 
+    /* Neutralizar transform e overflow nos ancestrais do game-embed
+       para que position:fixed funcione corretamente no mobile */
+    body.ge-pseudo-fullscreen .new-game-section,
+    body.ge-pseudo-fullscreen .new-game-container,
+    body.ge-pseudo-fullscreen .new-game-visual,
+    body.ge-pseudo-fullscreen .new-game-card {
+      transform: none !important;
+      overflow: visible !important;
+      border-radius: 0 !important;
+      box-shadow: none !important
+    }
+
     /* game-embed fixado cobrindo toda a tela;
        z-index 9990: abaixo do overlay da roleta (9999) */
     body.ge-pseudo-fullscreen .game-embed {
@@ -950,6 +962,14 @@
       font-size: clamp(12px, 3vw, 15px);
       color: rgba(255,255,255,.7);
       font-weight: 500
+    }
+
+    /* Portrait mobile em pseudo-fullscreen: permitir scroll se não couber */
+    @media (pointer: coarse) and (orientation: portrait) {
+      body.ge-pseudo-fullscreen .ge-game-wrapper {
+        height: 100%;
+        overflow-y: auto
+      }
     }
 
     /* ── LAYOUT COMPACTO — mobile landscape (~360px de altura) ──────────
