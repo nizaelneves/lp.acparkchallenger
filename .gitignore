@@ -1,0 +1,20 @@
+.env
+env.local
+venv/
+.venv/
+__pycache__/
+*.pyc
+leads.json
+.DS_Store
+node_modules/
+dist/
+build/
+.vscode/
+.idea/
+# Internal docs / AI workspace
+.claude/
+DESIGN.md
+docs/ 
+# Reference / working assets not needed in production
+assets/references/
+assets/design systems/

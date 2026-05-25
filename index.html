@@ -1,0 +1,2389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Águas Correntes Park - Desafio</title>
+  <link rel="icon" type="image/png" href="assets/images/Favicon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    /* Fonts loaded via <link> above */
+
+    /* ── GAME EMBED KEYFRAMES ─────────────────────────────────────────────── */
+    @keyframes ge-fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes ge-bounceIn {
+      0% {
+        transform: scale(.5);
+        opacity: 0
+      }
+
+      70% {
+        transform: scale(1.1)
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    @keyframes ge-slideUp {
+      from {
+        transform: translateY(30px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1
+      }
+    }
+
+    @keyframes ge-pulse {
+      from {
+        transform: scale(1)
+      }
+
+      to {
+        transform: scale(1.1)
+      }
+    }
+
+    @keyframes ge-feedbackAnim {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(.5)
+      }
+
+      30% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2)
+      }
+
+      60% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1)
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -65%) scale(1)
+      }
+    }
+
+    /* ── START SCREEN ─────────────────────────────────────────────────────── */
+    #screen-start {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 32px 20px;
+      text-align: center;
+      animation: ge-fadeIn .5s ease
+    }
+
+    .ge-start-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(30px, 5vw, 68px);
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 4px 4px 0 #9a4600, 2px 2px 0 #753400;
+      line-height: 1;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+      text-transform: uppercase
+    }
+
+    .ge-start-title .de {
+      color: #FFD700;
+      display: block;
+      font-size: clamp(22px, 3.8vw, 52px)
+    }
+
+    .ge-start-title .acpark-brand {
+      color: #FFD700;
+      text-shadow: 3px 3px 0 #9a4600, 1px 1px 0 #753400;
+      letter-spacing: 0.06em
+    }
+
+    .ge-start-subtitle {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      color: #fff;
+      font-size: clamp(11px, 1.5vw, 16px);
+      font-weight: 500;
+      max-width: 480px;
+      margin: 12px auto 24px;
+      letter-spacing: 0.02em;
+      line-height: 1.5;
+      text-shadow: none;
+      text-transform: none
+    }
+
+    .ge-btn-start {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(14px, 2vw, 19px);
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: #f4760f;
+      color: #fff;
+      border: 2px solid #3d58b5;
+      border-radius: 9999px;
+      padding: 13px 52px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: transform .15s, box-shadow .15s;
+      box-shadow: 0 4px 0 #3d58b5
+    }
+
+    .ge-btn-start:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 0 #3d58b5
+    }
+
+    .ge-btn-start:active {
+      transform: scale(.98);
+      box-shadow: 0 2px 0 #3d58b5
+    }
+
+    .ge-qmarks {
+      font-size: clamp(20px, 3vw, 38px);
+      color: #FFD700;
+      text-shadow: 2px 2px 0 rgba(0, 0, 0, .3);
+      margin: 8px 0 12px;
+      letter-spacing: 4px
+    }
+
+    /* ── GAME SCREEN ──────────────────────────────────────────────────────── */
+    #screen-game {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      padding: 18px 22px
+    }
+
+    .ge-game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      gap: 12px
+    }
+
+    .ge-question-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(13px, 1.8vw, 22px);
+      font-weight: 800;
+      color: #FFD700;
+      text-shadow: 2px 2px 0 rgba(0, 0, 0, .4);
+      max-width: 75%;
+      line-height: 1.3;
+      letter-spacing: 0.02em;
+      text-transform: uppercase
+    }
+
+    .ge-timer-box {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(15px, 2vw, 26px);
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 1px 1px 0 rgba(0, 0, 0, .3);
+      background: rgba(154, 70, 0, .25);
+      border: 2px solid #f4760f;
+      border-radius: 8px;
+      padding: 4px 12px;
+      min-width: 82px;
+      text-align: center;
+      flex-shrink: 0
+    }
+
+    .ge-timer-box.urgent {
+      color: #E63946;
+      border-color: #E63946;
+      animation: ge-pulse .5s infinite alternate
+    }
+
+    .ge-answers-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto 12px
+    }
+
+    .ge-answer-btn {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-weight: 700;
+      font-size: clamp(11px, 1.5vw, 14px);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      background: #fff;
+      color: #1a1c1c;
+      border: 2px solid #3d58b5;
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: transform .1s, box-shadow .15s;
+      box-shadow: 0 4px 0 #3d58b5;
+      text-align: center
+    }
+
+    .ge-answer-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #3d58b5
+    }
+
+    .ge-answer-btn:active:not(:disabled) {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #3d58b5
+    }
+
+    .ge-answer-btn.correct {
+      background: #80a700 !important;
+      color: #fff !important;
+      border-color: #4e6700 !important;
+      box-shadow: 0 4px 0 #4e6700 !important
+    }
+
+    .ge-answer-btn.wrong {
+      background: #E63946 !important;
+      color: #fff !important;
+      border-color: #9c1a1a !important;
+      box-shadow: 0 4px 0 #9c1a1a !important
+    }
+
+    .ge-answer-btn.reveal-correct {
+      background: #80a700 !important;
+      color: #fff !important;
+      border-color: #4e6700 !important;
+      box-shadow: 0 4px 0 #4e6700 !important
+    }
+
+    .ge-answer-btn:disabled {
+      cursor: default
+    }
+
+    .ge-game-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 8px
+    }
+
+    .ge-progress-dots {
+      display: flex;
+      gap: 8px;
+      align-items: center
+    }
+
+    .ge-dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid #3d58b5;
+      background: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      color: #3d58b5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .3s;
+      position: relative
+    }
+
+    .ge-dot::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -10px;
+      width: 10px;
+      height: 2px;
+      background: #3d58b5
+    }
+
+    .ge-dot:first-child::before {
+      display: none
+    }
+
+    .ge-dot.active {
+      background: #FFD700;
+      color: #1a1c1c;
+      border-color: #b8960a
+    }
+
+    .ge-dot.correct-done {
+      background: #80a700;
+      color: #fff;
+      border-color: #4e6700
+    }
+
+    .ge-dot.wrong-done {
+      background: #E63946;
+      color: #fff;
+      border-color: #9c1a1a
+    }
+
+    .ge-dot.skipped {
+      background: #aaa;
+      color: #fff;
+      border-color: #666
+    }
+
+    .ge-btn-exit {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-weight: 700;
+      font-size: clamp(11px, 1.5vw, 15px);
+      color: #E63946;
+      text-shadow: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: transform .1s
+    }
+
+    .ge-btn-exit:hover {
+      transform: scale(1.1)
+    }
+
+    /* ── RESULT SCREEN ────────────────────────────────────────────────────── */
+    #screen-result {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 32px 20px;
+      text-align: center;
+      animation: ge-fadeIn .5s ease
+    }
+
+    .ge-result-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(24px, 4vw, 54px);
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 4px 4px 0 #9a4600;
+      line-height: 1.1;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em
+    }
+
+    .ge-result-score {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 900;
+      color: #FFD700;
+      text-shadow: 4px 4px 0 #9a4600;
+      margin: 8px 0
+    }
+
+    .ge-result-msg {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: clamp(12px, 1.7vw, 17px);
+      color: #fff;
+      font-weight: 500;
+      text-shadow: 1px 1px 0 rgba(0, 0, 0, .3);
+      max-width: 420px;
+      margin: 0 auto 16px
+    }
+
+    .ge-result-breakdown {
+      display: flex;
+      gap: 10px;
+      margin: 6px 0 14px;
+      flex-wrap: wrap;
+      justify-content: center
+    }
+
+    .ge-rb-item {
+      background: rgba(255, 255, 255, .15);
+      border: 1.5px solid rgba(255, 255, 255, .3);
+      border-radius: 8px;
+      padding: 7px 13px;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-weight: 700;
+      color: #fff;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .ge-rb-item .icon {
+      font-size: 18px
+    }
+
+    .ge-result-meme-wrap {
+      margin: 10px 0 16px;
+      line-height: 0
+    }
+
+    .ge-result-meme {
+      width: 180px;
+      max-width: 60%;
+      border-radius: 12px;
+      border: 3px solid #3d58b5;
+      box-shadow: 4px 4px 0 #3d58b5;
+      display: block;
+      margin: 0 auto
+    }
+
+    .ge-btn-play-again {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(12px, 1.7vw, 17px);
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: #f4760f;
+      color: #fff;
+      border: 2px solid #3d58b5;
+      border-radius: 9999px;
+      padding: 12px 36px;
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow: 0 4px 0 #3d58b5;
+      transition: transform .15s, box-shadow .15s
+    }
+
+    .ge-btn-play-again:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 0 #3d58b5
+    }
+
+    .ge-bounce {
+      animation: ge-bounceIn .4s ease forwards
+    }
+
+    .ge-feedback-overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(40px, 8vw, 90px);
+      pointer-events: none;
+      z-index: 10000;
+      text-shadow: 4px 4px 0 rgba(0, 0, 0, .5);
+      animation: ge-feedbackAnim .9s ease forwards
+    }
+
+    /* ── ROULETTE OVERLAY ─────────────────────────────────────────────────── */
+    #overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999
+    }
+
+    #modal {
+      background: #f9f9f9;
+      border-radius: 16px;
+      border: 2px solid #f4760f;
+      padding: 36px 40px;
+      max-width: 720px;
+      width: 95%;
+      display: flex;
+      gap: 36px;
+      align-items: center;
+      position: relative;
+      box-shadow: 6px 6px 0 #9a4600;
+      animation: ge-slideUp .4s ease
+    }
+
+    #closeBtn {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      background: none;
+      border: none;
+      color: #584236;
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+      transition: color .2s
+    }
+
+    #closeBtn:hover {
+      color: #f4760f
+    }
+
+    #wheelSection {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px
+    }
+
+    .wheel-wrapper {
+      position: relative;
+      width: 240px;
+      height: 240px
+    }
+
+    canvas#wheelCanvas {
+      border-radius: 50%;
+      display: block
+    }
+
+    .pointer {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 22px solid #f4760f;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .4));
+      z-index: 10
+    }
+
+    .center-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 52px;
+      height: 52px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      border: 3px solid #3d58b5
+    }
+
+    .center-circle .brand-letter {
+      color: #f4760f;
+      font-weight: 900;
+      font-size: 18px;
+      letter-spacing: -1px;
+      font-family: 'Montserrat', sans-serif
+    }
+
+    .countdown-bar {
+      background: #fff;
+      border: 1.5px solid #3d58b5;
+      border-radius: 30px;
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #1a1c1c;
+      white-space: nowrap
+    }
+
+    .countdown-time {
+      color: #f4760f;
+      font-weight: 700;
+      font-family: monospace;
+      font-size: 14px
+    }
+
+    #formSection {
+      flex: 1;
+      min-width: 0
+    }
+
+    #formSection h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: #1a1c1c;
+      margin-bottom: 8px;
+      line-height: 1.2
+    }
+
+    #formSection .desc {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: 14px;
+      color: #584236;
+      margin-bottom: 22px;
+      line-height: 1.6
+    }
+
+    .form-group {
+      margin-bottom: 16px
+    }
+
+    .form-group label {
+      display: block;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      color: #1a1c1c;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px
+    }
+
+    .form-group input[type="email"],
+    .form-group input[type="tel"] {
+      width: 100%;
+      padding: 10px 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1.5px solid #3d58b5;
+      color: #1a1c1c;
+      font-size: 15px;
+      outline: none;
+      transition: border-color .2s
+    }
+
+    .form-group input:focus {
+      border-bottom-color: #f4760f
+    }
+
+    .form-group input::placeholder {
+      color: #8b7264
+    }
+
+    .checkbox-wrap {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 20px
+    }
+
+    .checkbox-wrap input[type=checkbox] {
+      margin-top: 2px;
+      accent-color: #f4760f;
+      flex-shrink: 0
+    }
+
+    .checkbox-wrap label {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: 11.5px;
+      color: #584236;
+      line-height: 1.5
+    }
+
+    .checkbox-wrap a {
+      color: #f4760f;
+      text-decoration: none
+    }
+
+    .checkbox-wrap a:hover {
+      text-decoration: underline
+    }
+
+    #spinBtn {
+      width: 100%;
+      padding: 15px;
+      background: #f4760f;
+      border: 2px solid #9a4600;
+      border-radius: 9999px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 0 #9a4600;
+      transition: transform .15s, box-shadow .15s
+    }
+
+    #spinBtn:hover:not(:disabled) {
+      transform: scale(1.05);
+      box-shadow: 0 6px 0 #9a4600
+    }
+
+    #spinBtn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: 0 4px 0 #9a4600
+    }
+
+    #resultPanel {
+      display: none;
+      text-align: center
+    }
+
+    #resultPanel h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 10px
+    }
+
+    #resultPanel .sub {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      color: #584236;
+      font-size: 14px;
+      margin-bottom: 6px
+    }
+
+    #couponBox {
+      background: #fff;
+      border: 2px dashed #f4760f;
+      border-radius: 10px;
+      padding: 14px 10px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 24px;
+      font-weight: 900;
+      color: #3d58b5;
+      letter-spacing: 3px;
+      margin: 14px 0;
+      cursor: pointer;
+      transition: background .2s
+    }
+
+    #couponBox:hover {
+      background: #f3f3f4
+    }
+
+    #copyHint {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: 11px;
+      color: #8b7264;
+      margin-top: -8px;
+      margin-bottom: 10px
+    }
+
+    .again-btn {
+      background: transparent;
+      border: 1.5px solid #3d58b5;
+      border-radius: 30px;
+      color: #3d58b5;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      padding: 8px 20px;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all .2s
+    }
+
+    .again-btn:hover {
+      border-color: #f4760f;
+      color: #f4760f
+    }
+
+    /* ── FULLSCREEN BUTTON (desktop only) ───────────────────────────────── */
+    .ge-btn-fullscreen {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 50;
+      background: rgba(0, 0, 0, .35);
+      border: 1.5px solid rgba(255, 255, 255, .25);
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      transition: background .2s, transform .15s;
+      backdrop-filter: blur(4px)
+    }
+
+    .ge-btn-fullscreen:hover {
+      background: rgba(244, 118, 15, .75);
+      transform: scale(1.1)
+    }
+
+    /* No mobile, ocultar o botão (fullscreen é automático ao clicar SIMBORA) */
+    @media (pointer: coarse) {
+      .ge-btn-fullscreen {
+        display: none
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       DESKTOP FULLSCREEN — via Fullscreen API nativa do browser
+       A classe .ge-desktop-fs é adicionada ao body pelo JS ao entrar em FS.
+       Usamos ela (não :fullscreen) porque ancestors com transform/overflow
+       quebram position:fixed se usarmos só o seletor nativo :fullscreen.
+    ═══════════════════════════════════════════════════════════════════════ */
+
+    /* Ocultar elementos fora do jogo */
+    body.ge-desktop-fs .new-game-info,
+    body.ge-desktop-fs .blob-yellow,
+    body.ge-desktop-fs .blob-blue {
+      display: none !important
+    }
+
+    /* Neutralizar transform e overflow nos ancestrais do game-embed
+       para que position:fixed funcione corretamente */
+    body.ge-desktop-fs .new-game-section,
+    body.ge-desktop-fs .new-game-container,
+    body.ge-desktop-fs .new-game-visual,
+    body.ge-desktop-fs .new-game-card {
+      transform: none !important;
+      overflow: visible !important;
+      border-radius: 0 !important;
+      box-shadow: none !important
+    }
+
+    /* game-embed cobre toda a tela via position:fixed */
+    body.ge-desktop-fs .game-embed {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: none !important;
+      max-height: none !important;
+      border-radius: 0 !important;
+      z-index: 9990 !important
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       MOBILE — pseudo-fullscreen (cobre a tela via CSS, sem API nativa)
+       Ativado automaticamente ao clicar SIMBORA no mobile (pointer: coarse)
+    ═══════════════════════════════════════════════════════════════════════ */
+
+    /* Ocultar FAB e outros elementos fora do jogo */
+    body.ge-pseudo-fullscreen .fab-ticket {
+      display: none !important
+    }
+
+    /* game-embed fixado cobrindo toda a tela;
+       z-index 9990: abaixo do overlay da roleta (9999) */
+    body.ge-pseudo-fullscreen .game-embed {
+      position: fixed !important;
+      inset: 0 !important;
+      z-index: 9990 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      border-radius: 0 !important;
+      max-width: none !important;
+      max-height: none !important;
+      overflow: hidden !important
+    }
+
+    /* ── AVISO "GIRE O CELULAR" (mobile em portrait ao entrar em fullscreen) ── */
+    #ge-rotate-hint {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99998;
+      background: rgba(15, 15, 15, .96);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      text-align: center;
+      padding: 24px;
+      opacity: 0
+    }
+
+    #ge-rotate-hint.visible {
+      display: flex;
+      animation: ge-hint-show 0.4s ease forwards
+    }
+
+    #ge-rotate-hint.fading {
+      animation: ge-hint-hide 0.5s ease forwards !important
+    }
+
+    @keyframes ge-hint-show {
+      from { opacity: 0; transform: scale(0.92) }
+      to   { opacity: 1; transform: scale(1)    }
+    }
+
+    @keyframes ge-hint-hide {
+      from { opacity: 1; transform: scale(1)    }
+      to   { opacity: 0; transform: scale(0.92) }
+    }
+
+    #ge-rotate-hint .hint-phone {
+      animation: ge-phone-rotate 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      transform-origin: center center
+    }
+
+    @keyframes ge-phone-rotate {
+      0%   { transform: rotate(0deg);   }
+      20%  { transform: rotate(0deg);   }
+      60%  { transform: rotate(-90deg); }
+      78%  { transform: rotate(-90deg); }
+      98%  { transform: rotate(0deg);   }
+      100% { transform: rotate(0deg);   }
+    }
+
+    #ge-rotate-hint p {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: clamp(15px, 4vw, 22px);
+      color: #FFD700;
+      text-shadow: 2px 2px 0 #9a4600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin: 0
+    }
+
+    #ge-rotate-hint span {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: clamp(12px, 3vw, 15px);
+      color: rgba(255,255,255,.7);
+      font-weight: 500
+    }
+
+    /* ── LAYOUT COMPACTO — mobile landscape (~360px de altura) ──────────
+       Só afeta mobile em pseudo-fullscreen horizontal.
+       NÃO aplica ao desktop (nenhum seletor :fullscreen aqui).
+    ─────────────────────────────────────────────────────────────────── */
+    @media (pointer: coarse) and (orientation: landscape) and (max-height: 520px) {
+      body.ge-pseudo-fullscreen .ge-game-wrapper {
+        height: 100%;
+        overflow-y: auto
+      }
+
+      body.ge-pseudo-fullscreen #screen-start {
+        padding: 10px 16px;
+        gap: 2px
+      }
+
+      body.ge-pseudo-fullscreen .ge-start-title {
+        font-size: clamp(20px, 5vw, 32px)
+      }
+
+      body.ge-pseudo-fullscreen .ge-start-subtitle {
+        font-size: 11px;
+        margin: 4px auto 12px
+      }
+
+      body.ge-pseudo-fullscreen .ge-qmarks {
+        margin: 2px 0 6px
+      }
+
+      body.ge-pseudo-fullscreen #screen-game {
+        padding: 8px 14px
+      }
+
+      body.ge-pseudo-fullscreen .ge-game-header {
+        margin-bottom: 6px
+      }
+
+      body.ge-pseudo-fullscreen .ge-question-text {
+        font-size: clamp(11px, 2.5vw, 15px)
+      }
+
+      /* Respostas em 2 colunas no landscape — cabe melhor na largura */
+      body.ge-pseudo-fullscreen .ge-answers-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        margin-bottom: 6px
+      }
+
+      body.ge-pseudo-fullscreen .ge-answer-btn {
+        padding: 7px 10px;
+        font-size: 11px
+      }
+
+      body.ge-pseudo-fullscreen .ge-dot {
+        width: 26px;
+        height: 26px;
+        font-size: 10px
+      }
+
+      body.ge-pseudo-fullscreen #screen-result {
+        padding: 12px 16px
+      }
+
+      body.ge-pseudo-fullscreen .ge-result-title {
+        font-size: clamp(16px, 4vw, 26px)
+      }
+
+      body.ge-pseudo-fullscreen .ge-result-score {
+        font-size: clamp(26px, 6vw, 44px);
+        margin: 3px 0
+      }
+
+      body.ge-pseudo-fullscreen .ge-result-msg {
+        font-size: 11px;
+        margin-bottom: 6px
+      }
+
+      body.ge-pseudo-fullscreen .ge-result-breakdown {
+        gap: 5px;
+        margin-bottom: 8px
+      }
+
+      body.ge-pseudo-fullscreen .ge-rb-item {
+        padding: 3px 7px;
+        font-size: 11px
+      }
+    }
+
+    /* ── MEME FEEDBACK OVERLAY ───────────────────────────────────────────── */
+    .ge-game-wrapper {
+      position: relative
+    }
+
+    .ge-meme-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, .84);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      border-radius: inherit;
+      animation: ge-fadeIn .2s ease;
+      pointer-events: none
+    }
+
+    .ge-meme-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      text-align: center;
+      max-width: 90%
+    }
+
+    .ge-meme-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: clamp(18px, 3vw, 28px);
+      text-shadow: 2px 2px 0 rgba(0, 0, 0, .5);
+      letter-spacing: -0.01em
+    }
+
+    .ge-meme-img {
+      width: clamp(130px, 38%, 210px);
+      border-radius: 10px;
+      border: 3px solid #3d58b5;
+      box-shadow: 4px 4px 0 #3d58b5;
+      display: block
+    }
+
+    .ge-meme-sub {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: clamp(11px, 1.5vw, 15px);
+      color: #fff;
+      font-weight: 500
+    }
+
+    @media(max-width:600px) {
+      #modal {
+        flex-direction: column;
+        padding: 24px 18px;
+        gap: 20px
+      }
+
+      .wheel-wrapper {
+        width: 200px;
+        height: 200px
+      }
+
+      #formSection h2 {
+        font-size: 22px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <!-- Logo removido conforme solicitado -->
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="new-hero" id="hero">
+      <!-- Elemento de Bandeirinhas e Luzes do Brasil (Inspirado na imagem junina) -->
+      <div class="brazilian-flags-banner">
+        <!-- SVG do Cordão -->
+        <svg class="bunting-string-svg" viewBox="0 0 1440 60" preserveAspectRatio="none">
+          <path d="M0,15 Q360,50 720,35 T1440,15" fill="none" stroke="rgba(26,28,28,0.4)" stroke-width="2" />
+        </svg>
+
+        <!-- Luzes Decorativas -->
+        <div class="bunting-lights">
+          <div class="bulb bulb-1" style="left: 8%; top: 20px;"></div>
+          <div class="bulb bulb-2" style="left: 20%; top: 31px;"></div>
+          <div class="bulb bulb-3" style="left: 32%; top: 38px;"></div>
+          <div class="bulb bulb-4" style="left: 44%; top: 41px;"></div>
+          <div class="bulb bulb-5" style="left: 56%; top: 39px;"></div>
+          <div class="bulb bulb-6" style="left: 68%; top: 34px;"></div>
+          <div class="bulb bulb-7" style="left: 80%; top: 26px;"></div>
+          <div class="bulb bulb-8" style="left: 92%; top: 18px;"></div>
+        </div>
+
+        <!-- Bandeirinhas com as cores e padrões do Brasil -->
+        <div class="bunting-flags">
+          <div class="bunting-flag flag-tri flag-plaid-green"></div>
+          <div class="bunting-flag flag-swallow flag-dots-yellow"></div>
+          <div class="bunting-flag flag-tri flag-solid-blue"></div>
+          <div class="bunting-flag flag-swallow flag-stripes-white"></div>
+          <div class="bunting-flag flag-tri flag-dots-green"></div>
+          <div class="bunting-flag flag-swallow flag-plaid-yellow"></div>
+          <div class="bunting-flag flag-tri flag-solid-blue"></div>
+          <div class="bunting-flag flag-swallow flag-plaid-green"></div>
+          <div class="bunting-flag flag-tri flag-dots-yellow"></div>
+          <div class="bunting-flag flag-swallow flag-stripes-white"></div>
+          <div class="bunting-flag flag-tri flag-solid-green"></div>
+          <div class="bunting-flag flag-swallow flag-dots-blue"></div>
+          <div class="bunting-flag flag-tri flag-plaid-yellow"></div>
+          <div class="bunting-flag flag-swallow flag-solid-green"></div>
+          <div class="bunting-flag flag-tri flag-stripes-white"></div>
+        </div>
+      </div>
+
+      <!-- Decorative Background Element -->
+      <div class="new-hero-bg-pattern"></div>
+
+      <!-- Main Content Container -->
+      <div class="container new-hero-content">
+        <div class="new-hero-text-wrapper">
+          <img src="assets/images/Hero_Festa_Junina.png" alt="Festa Junina no Águas Correntes Park"
+            class="new-hero-image">
+          <h1 class="new-hero-title">AÍ DENTO, SEU JUÍZ! AQUI QUEM DECIDE É A ROLETA</h1>
+          <p class="new-hero-subtitle">
+            PROVE QUE VOCÊ MANJA DE FUTEBOL, FORRÓ E TOBOGÃ
+          </p>
+          <div class="new-hero-actions">
+            <a href="#game" class="new-hero-btn">JOGUE AGORA</a>
+          </div>
+        </div>
+      </div>
+
+
+
+
+    </section>
+
+    <!-- Embedded Game Section: Penalty Junino -->
+    <section class="new-game-section" id="game">
+      <!-- Decorative background blobs -->
+      <div class="blob-yellow"></div>
+      <div class="blob-blue"></div>
+
+      <div class="container new-game-container">
+        <!-- Text Info — redesigned left side (Gold Package style) -->
+        <div class="new-game-info">
+          <!-- Eyebrow -->
+          <p class="game-info-eyebrow">
+            <span class="game-eyebrow-line"></span>
+            ACERTOU + GIROU + GANHOU
+          </p>
+
+          <!-- Título -->
+          <h2 class="game-info-title">COMO FUNCIONA O DESAFIO</h2>
+
+          <!-- Regras no estilo Gold Package -->
+          <ul class="game-rules-list">
+            <li class="game-rule-item">
+              <span class="game-rule-dash"></span>
+              <div class="game-rule-content">
+                <span class="game-rule-number">01</span>
+                <p class="game-rule-text">São 30 segundos por pergunta, cabra. O relógio não para.</p>
+              </div>
+            </li>
+            <li class="game-rule-item">
+              <span class="game-rule-dash"></span>
+              <div class="game-rule-content">
+                <span class="game-rule-number">02</span>
+                <p class="game-rule-text">Fez 700 pontos? Ganha 1 giro. Acertou tudim? Aí são 2 giros.</p>
+              </div>
+            </li>
+            <li class="game-rule-item">
+              <span class="game-rule-dash"></span>
+              <div class="game-rule-content">
+                <span class="game-rule-number">03</span>
+                <p class="game-rule-text">Girou? Ganhou? Seu cupom fica guardado 15 minutim só. Num perde tempo!</p>
+              </div>
+            </li>
+            <li class="game-rule-item">
+              <span class="game-rule-dash"></span>
+              <div class="game-rule-content">
+                <span class="game-rule-number">04</span>
+                <p class="game-rule-text">Os cupons têm quantidade limitada; quando acabar, acabou! Visse.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Game Interface Visual — Embedded Quiz + Roulette -->
+        <div class="new-game-visual">
+          <div class="new-game-card">
+            <div class="game-embed">
+              <!-- Decorative backgrounds scoped to the board -->
+              <div class="ge-burst-bg"></div>
+              <div class="ge-burst-lines"></div>
+              <div class="ge-globe-pattern"></div>
+
+              <!-- Botão Fullscreen (desktop only) -->
+              <button class="ge-btn-fullscreen" id="ge-btn-fullscreen" onclick="toggleFullscreen()" title="Tela cheia" aria-label="Alternar tela cheia">
+                <svg id="ge-fs-icon-enter" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+                <svg id="ge-fs-icon-exit" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/></svg>
+              </button>
+
+              <div class="ge-game-wrapper">
+
+                <!-- Start Screen -->
+                <div id="screen-start">
+                  <div class="ge-start-title">DESAFIO <span class="de acpark-brand">ACPARK</span></div>
+                  <div class="ge-qmarks">&#10067;&#10067;&#10067;</div>
+                  <div class="ge-start-subtitle">PROVE QUE VOCÊ É UM CABRA DA PESTE</div>
+                  <button class="ge-btn-start" onclick="startGame()">SIMBORA!</button>
+                </div>
+
+                <!-- Game Screen -->
+                <div id="screen-game">
+                  <div class="ge-game-header">
+                    <div class="ge-question-text" id="question-text">...</div>
+                    <div class="ge-timer-box" id="timer-display">00:30</div>
+                  </div>
+                  <div class="ge-answers-grid" id="answers-grid"></div>
+                  <div class="ge-game-footer">
+                    <div class="ge-progress-dots" id="progress-dots"></div>
+                    <button class="ge-btn-exit" onclick="exitGame()">SAIR</button>
+                  </div>
+                </div>
+
+                <!-- Result Screen -->
+                <div id="screen-result">
+                  <div class="ge-result-title" id="result-title">CABOU-SE</div>
+                  <div class="ge-result-score" id="result-score">0/3</div>
+                  <div class="ge-result-msg" id="result-msg"></div>
+                  <div class="ge-result-breakdown" id="result-breakdown"></div>
+                  <button class="ge-btn-play-again" onclick="resetGame()">PELEJAR DE NOVO</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coupon Section: Ingressos de Vantagens -->
+    <section class="new-coupons-section" id="coupons">
+      <div class="container new-coupons-container">
+        <div class="new-coupons-header">
+          <h2 class="new-coupons-title">
+            O QUE TÁ EM JOGO
+            <svg class="new-coupons-title-underline" preserveAspectRatio="none" viewBox="0 0 100 20">
+              <path d="M0 10 Q 25 20, 50 10 T 100 10" fill="none" stroke="currentColor" stroke-width="4"></path>
+            </svg>
+          </h2>
+        </div>
+
+        <div class="new-coupons-grid">
+          <!-- Ticket 1 -->
+          <div class="new-ticket">
+            <span class="ticket-name">10% OFF</span>
+            <div class="ticket-qty-wrap">
+              <span class="ticket-qty">10</span>
+              <span class="ticket-available">DISPONÍVEIS</span>
+            </div>
+          </div>
+
+          <!-- Ticket 2 -->
+          <div class="new-ticket">
+            <span class="ticket-name">20% OFF</span>
+            <div class="ticket-qty-wrap">
+              <span class="ticket-qty">10</span>
+              <span class="ticket-available">DISPONÍVEIS</span>
+            </div>
+          </div>
+
+          <!-- Ticket 3 -->
+          <div class="new-ticket ticket-featured">
+            <span class="ticket-name">30% OFF</span>
+            <div class="ticket-qty-wrap">
+              <span class="ticket-qty">10</span>
+              <span class="ticket-available">DISPONÍVEIS</span>
+            </div>
+          </div>
+
+          <!-- Ticket 4 -->
+          <div class="new-ticket ticket-featured">
+            <span class="ticket-name">BALDE DE BEBIDA</span>
+            <div class="ticket-qty-wrap">
+              <span class="ticket-qty">10</span>
+              <span class="ticket-available">DISPONÍVEIS</span>
+            </div>
+          </div>
+
+          <!-- Ticket 5 -->
+          <div class="new-ticket">
+            <span class="ticket-name">4 INGRESSOS CORTESIA</span>
+            <div class="ticket-qty-wrap">
+              <span class="ticket-qty">10</span>
+              <span class="ticket-available">DISPONÍVEIS</span>
+            </div>
+          </div>
+
+          <!-- Ticket 6 -->
+          <div class="new-ticket">
+            <span class="ticket-name">5 INGRESSOS CORTESIA</span>
+            <div class="ticket-qty-wrap">
+              <span class="ticket-qty">10</span>
+              <span class="ticket-available">DISPONÍVEIS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="new-footer">
+    <div class="new-footer-container">
+      <p class="new-footer-copyright">ÁGUAS CORRENTES PARK LTDA - CNPJ: 01.979.230/0001-07 - © 2026 ÁGUAS CORRENTES
+        PARK. TODOS OS DIREITOS RESERVADOS.</p>
+    </div>
+  </footer>
+
+  <script>
+    /* Coupon button interaction — visual feedback */
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.ticket-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const original = btn.textContent;
+          btn.textContent = '✓ RESGATADO!';
+          btn.style.background = 'linear-gradient(135deg, #2e7d32, #1b5e20)';
+          btn.style.color = '#fff';
+          btn.disabled = true;
+          setTimeout(function () {
+            btn.textContent = original;
+            btn.style.background = '';
+            btn.style.color = '';
+            btn.disabled = false;
+          }, 2500);
+        });
+      });
+    });
+  </script>
+
+  <script src="js/main.js"></script>
+
+  <!-- ── ROULETTE OVERLAY ──────────────────────────────────────────────── -->
+  <div id="overlay">
+    <div id="modal">
+      <button id="closeBtn" onclick="closeModal()" title="Fechar">&#10005;</button>
+
+      <div id="wheelSection">
+        <div class="wheel-wrapper">
+          <div class="pointer"></div>
+          <canvas id="wheelCanvas" width="240" height="240"></canvas>
+          <div class="center-circle">
+            <span class="brand-letter">A</span>
+          </div>
+        </div>
+        <div class="countdown-bar">
+          <span>&#9200;</span>
+          <span>Resta Só:</span>
+          <span class="countdown-time" id="rouletteTimer">15:00</span>
+        </div>
+      </div>
+
+      <div id="formSection">
+        <h2>A ROLETA É SUA, CABRA! </h2>
+        <p class="desc">Preenche aí seus dados, sô! A roleta tá te esperando.</p>
+
+        <div id="inputForm">
+          <div class="form-group">
+            <label>Email*</label>
+            <input type="email" id="emailInput" placeholder="Seu E-mail" required />
+          </div>
+          <div class="form-group">
+            <label>Telefone Celular (Com DDD)*</label>
+            <input type="tel" id="phoneInput" placeholder="(00) 00000-0000" required />
+          </div>
+          <div class="checkbox-wrap">
+            <input type="checkbox" id="privacyCheck" />
+            <label for="privacyCheck">
+              Autorizo o uso dos meus dados para fins de marketing e comunicação, conforme a
+              <a href="#" target="_blank">Política de Privacidade</a>.*
+            </label>
+          </div>
+          <button id="spinBtn" onclick="handleSpin()">ARROCHAAAA!</button>
+        </div>
+
+        <div id="resultPanel">
+          <div id="noLuckMsg" style="display:none">
+            <h3 style="color:#ff6b6b;">Foi na trave de novo!</h3>
+            <p class="sub">Até o Pelé perdeu pênalti, levanta e tenta de novo!</p>
+          </div>
+          <div id="winMsg" style="display:none">
+            <h3 style="color:#80a700;">Solta o rojão! Seu prêmio é:</h3>
+            <div id="couponBox" onclick="copyCoupon()" title="Clica aí para guardar seu prêmio"></div>
+            <p id="copyHint">Clique no cupom para copiar</p>
+            <p class="sub">Usa esse cupom na hora de garantir seu ingresso!</p>
+          </div>
+          <button class="again-btn" onclick="resetRouletteForm()">&#8635; TENTA A SORTE DE NOVO</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── GAME SCRIPT ────────────────────────────────────────────────────── -->
+  <script>
+    // ============================================================
+    //  QUIZ
+    // ============================================================
+    let QUESTIONS = [];
+
+    async function loadQuestionsFromApi() {
+      for (var attempt = 0; attempt < 3; attempt++) {
+        try {
+          var res = await fetch('/api/questions');
+          var data = await res.json();
+          if (data.success && Array.isArray(data.questions)) {
+            QUESTIONS = data.questions;
+            return;
+          }
+        } catch (e) {
+          // network error — will retry
+        }
+        if (attempt < 2) {
+          await new Promise(function (resolve) { setTimeout(resolve, 2000); });
+        }
+      }
+      QUESTIONS = [];
+      alert('Não foi possível carregar as perguntas. Tente novamente em alguns instantes.');
+    }
+
+    let currentQ = 0, score = 0, answers = [], quizTimer = null, timeLeft = 30, answered = false;
+
+    const MEMES_CORRECT = [
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 1.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 2.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 3.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 4.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 5.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 7.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 8.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 9.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 10.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 11.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 12.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 13.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 14.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 15.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 16.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 17.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 18.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 19.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 20.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 21.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 22.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 23.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 24.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 25.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 26.gif',
+      'assets/memes/memes_vitórias/MEME_VITÓRIA 27.gif'
+    ];
+    const MEMES_WRONG = [
+      'assets/memes/memes_derrota/MEME_DERROTA 1.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 2.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 3.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 4.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 5.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 6.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 7.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 8.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 9.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 10.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 11.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 12.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 13.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 14.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 15.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 16.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 17.gif',
+      'assets/memes/memes_derrota/MEME_DERROTA 18.gif'
+    ];
+    const MEMES_TIMEOUT = MEMES_WRONG;
+    let lastCorrectMeme = null, lastWrongMeme = null;
+
+    function showMemeFeedback(type, callback) {
+      const pool = type === 'correct' ? MEMES_CORRECT : (type === 'timeout' ? MEMES_TIMEOUT : MEMES_WRONG);
+      const lastUsed = type === 'correct' ? lastCorrectMeme : lastWrongMeme;
+      let file;
+      if (pool.length <= 1) {
+        file = pool[0];
+      } else {
+        const available = pool.filter(f => f !== lastUsed);
+        file = available[Math.floor(Math.random() * available.length)];
+      }
+      if (type === 'correct') lastCorrectMeme = file;
+      else lastWrongMeme = file;
+      const cfg = {
+        correct: { color: '#80a700', title: '✅ CERTÔ!' },
+        wrong: { color: '#E63946', title: '❌ FOI NA TRAVE!' },
+        timeout: { color: '#FFD700', title: '⏰ PERDEU O COMPASSO!' }
+      };
+      const c = cfg[type] || cfg.wrong;
+      const src = '/' + file.split('/').map(encodeURIComponent).join('/');
+      const overlay = document.createElement('div');
+      overlay.className = 'ge-meme-overlay';
+      overlay.innerHTML =
+        '<div class="ge-meme-card">' +
+        '<div class="ge-meme-title" style="color:' + c.color + '">' + c.title + '</div>' +
+        '<img class="ge-meme-img" src="' + src + '" alt="" onerror="this.style.display=\'none\'">' +
+        '</div>';
+      document.querySelector('.ge-game-wrapper').appendChild(overlay);
+      setTimeout(function () { overlay.remove(); callback(); }, 2800);
+    }
+
+    function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+    function showScreen(id) {
+      ['screen-start', 'screen-game', 'screen-result'].forEach(s => { document.getElementById(s).style.display = 'none'; });
+      document.getElementById(id).style.display = 'flex';
+    }
+
+    async function startGame() {
+      await loadQuestionsFromApi();
+      if (QUESTIONS.length === 0) return;
+      currentQ = 0; score = 0; answers = [];
+      currentQuizResultId = null; currentSpinsAllowed = 0; currentSpinsUsed = 0;
+      currentCanSpin = false; currentLeadId = null; currentSpinResults = [];
+      buildProgressDots();
+      showScreen('screen-game');
+      loadQuestion();
+    }
+
+    function exitGame() { clearInterval(quizTimer); showScreen('screen-start'); }
+
+    function buildProgressDots() {
+      const c = document.getElementById('progress-dots');
+      c.innerHTML = '';
+      QUESTIONS.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'ge-dot' + (i === 0 ? ' active' : '');
+        d.id = 'dot-' + i;
+        d.textContent = i + 1;
+        c.appendChild(d);
+      });
+    }
+
+    function updateDot(i, status) {
+      const d = document.getElementById('dot-' + i);
+      if (!d) return;
+      d.className = 'ge-dot';
+      if (status === 'active') d.classList.add('active');
+      else if (status === 'correct') d.classList.add('correct-done');
+      else if (status === 'wrong') d.classList.add('wrong-done');
+      else d.classList.add('skipped');
+    }
+
+    function loadQuestion() {
+      answered = false;
+      const q = QUESTIONS[currentQ];
+      document.getElementById('question-text').textContent = q.question.toUpperCase();
+      if (currentQ > 0) updateDot(currentQ - 1, answers[currentQ - 1] ? 'correct' : 'wrong');
+      updateDot(currentQ, 'active');
+      const shuffled = shuffle(q.options);
+      const grid = document.getElementById('answers-grid');
+      grid.innerHTML = '';
+      shuffled.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'ge-answer-btn';
+        btn.textContent = opt.toUpperCase();
+        btn.onclick = () => selectAnswer(btn, opt, q.correct);
+        grid.appendChild(btn);
+      });
+      startQuizTimer();
+    }
+
+    function startQuizTimer() {
+      clearInterval(quizTimer);
+      timeLeft = 30;
+      updateTimerDisplay();
+      quizTimer = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) { clearInterval(quizTimer); if (!answered) timeOut(); }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const el = document.getElementById('timer-display');
+      const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+      const s = String(timeLeft % 60).padStart(2, '0');
+      el.textContent = m + ':' + s;
+      el.classList.toggle('urgent', timeLeft <= 5);
+    }
+
+    function timeOut() {
+      answered = true; answers[currentQ] = false; disableAll(); revealCorrect();
+      showMemeFeedback('timeout', nextQuestion);
+    }
+
+    function selectAnswer(btn, selected, correct) {
+      if (answered) return;
+      answered = true;
+      clearInterval(quizTimer);
+      const ok = selected === correct;
+      answers[currentQ] = ok;
+      if (ok) score++;
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      disableAll();
+      if (!ok) revealCorrect();
+      showMemeFeedback(ok ? 'correct' : 'wrong', nextQuestion);
+    }
+
+    function disableAll() { document.querySelectorAll('.ge-answer-btn').forEach(b => b.disabled = true); }
+
+    function revealCorrect() {
+      const c = QUESTIONS[currentQ].correct.toUpperCase();
+      document.querySelectorAll('.ge-answer-btn').forEach(b => { if (b.textContent === c) b.classList.add('reveal-correct'); });
+    }
+
+    function showFeedback(icon) {
+      const el = document.createElement('div');
+      el.className = 'ge-feedback-overlay';
+      el.textContent = icon;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 950);
+    }
+
+    function nextQuestion() {
+      currentQ++;
+      if (currentQ < QUESTIONS.length) { loadQuestion(); }
+      else { updateDot(currentQ - 1, answers[currentQ - 1] ? 'correct' : 'wrong'); showResults(); }
+    }
+
+    async function showResults() {
+      showScreen('screen-result');
+      const total = QUESTIONS.length;
+      const correctAnswers = score;
+      const finalScore = correctAnswers * 100;
+      document.getElementById('result-score').textContent = finalScore + ' pts';
+      document.getElementById('result-score').classList.add('ge-bounce');
+      let title = '', msg = '';
+      if (correctAnswers === 12) {
+        title = 'AIDENTO, GABARITOU!'; msg = '12 de 12! Isso é coisa de CRAQUE mesmo, vá buscar seu prêmio!';
+      } else if (correctAnswers >= 8) {
+        title = 'QUASE LÁ, SÔ!'; msg = 'Faltou uns passim só pra gabaritar. Mas tu ganhou teu giro!';
+      } else if (correctAnswers === 7) {
+        title = 'FICOU NA BEIRADINHA!'; msg = '700 ponto já garante seu giro, aproveita sô!';
+      } else {
+        title = 'TÁ ENGATINHANDO AINDAA!'; msg = 'Num foi dessa vez sô. Peleja até ganhar!';
+      }
+      document.getElementById('result-title').textContent = title;
+      document.getElementById('result-msg').textContent = msg;
+      const bd = document.getElementById('result-breakdown');
+      bd.innerHTML = '';
+      QUESTIONS.forEach((q, i) => {
+        const item = document.createElement('div');
+        item.className = 'ge-rb-item';
+        item.innerHTML = '<span class="icon">' + (answers[i] ? '✅' : '❌') + '</span><span>Pergunta ' + (i + 1) + '</span>';
+        bd.appendChild(item);
+      });
+      // Critério local: >=7 acertos abre a roleta (espelho da lógica do backend)
+      const localCanSpin = correctAnswers >= 7;
+      const localSpinsAllowed = correctAnswers === 12 ? 2 : (correctAnswers >= 7 ? 1 : 0);
+
+      try {
+        const res = await fetch('/api/quiz-result', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ correct_answers: correctAnswers, total_questions: total })
+        });
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error('[quiz-result HTTP error]', res.status, errorText);
+          // Fallback local: abre roleta mesmo sem API se o usuário merece
+          if (localCanSpin) {
+            currentCanSpin = true;
+            currentSpinsAllowed = localSpinsAllowed;
+            currentSpinsUsed = 0;
+            currentQuizResultId = null;
+            currentLeadId = null;
+            setTimeout(openRoulette, 1800);
+          }
+          return;
+        }
+        const data = await res.json();
+        console.log('[quiz-result response]', data);
+        if (data.success !== true) {
+          console.error('[quiz-result API error]', data);
+          // Fallback local: abre roleta mesmo sem API se o usuário merece
+          if (localCanSpin) {
+            currentCanSpin = true;
+            currentSpinsAllowed = localSpinsAllowed;
+            currentSpinsUsed = 0;
+            currentQuizResultId = null;
+            currentLeadId = null;
+            setTimeout(openRoulette, 1800);
+          }
+          return;
+        }
+        currentQuizResultId = data.quiz_result_id;
+        currentSpinsAllowed = Number(data.spins_allowed || 0);
+        currentSpinsUsed = Number(data.spins_used || 0);
+        currentCanSpin = Boolean(data.can_spin);
+        currentLeadId = null;
+        if (currentCanSpin && currentSpinsAllowed > 0) {
+          setTimeout(openRoulette, 1800);
+        }
+      } catch (error) {
+        console.error('[quiz-result fetch failed]', error);
+        // Fallback local: abre roleta mesmo sem conexão se o usuário merece
+        if (localCanSpin) {
+          currentCanSpin = true;
+          currentSpinsAllowed = localSpinsAllowed;
+          currentSpinsUsed = 0;
+          currentQuizResultId = null;
+          currentLeadId = null;
+          setTimeout(openRoulette, 1800);
+        }
+      }
+    }
+
+    function resetGame() {
+      document.getElementById('result-score').classList.remove('ge-bounce');
+      startGame();
+    }
+
+    // ============================================================
+    //  ROLETA
+    // ============================================================
+    const ROULETTE_SEGMENTS = [
+      { label: "10%\nOFF", coupon: "ARRAIA10", color: "#FFD700", textColor: "#1a1c1c" },
+      { label: "SEM\nSORTE", coupon: null, color: "#3d58b5", textColor: "#ffffff" },
+      { label: "20%\nOFF", coupon: "FORRÓ20", color: "#80a700", textColor: "#ffffff" },
+      { label: "30%\nOFF", coupon: "XADREZ30", color: "#E63946", textColor: "#ffffff" },
+      { label: "BALDE\nDE\nBEBIDA", coupon: "BALDEDOHEXA", color: "#f4760f", textColor: "#ffffff" },
+      { label: "CORTESIA\n4", coupon: "CORTESIA4", color: "#3d58b5", textColor: "#ffffff" },
+      { label: "CORTESIA\n5", coupon: "CORTESIA5", color: "#FFD700", textColor: "#1a1c1c" },
+      { label: "SEM\nSORTE", coupon: null, color: "#9a4600", textColor: "#ffffff" }
+    ];
+    const ROULETTE_WEIGHTS = [30, 10, 15, 15, 10, 10, 10, 10];
+    const NUM = ROULETTE_SEGMENTS.length;
+    const ARC = (2 * Math.PI) / NUM;
+    let currentAngle = 0, spinning = false, countdownInterval = null;
+    let currentSpinsAllowed = 0, currentSpinsUsed = 0;
+    let currentQuizResultId = null, currentLeadId = null, currentCanSpin = false;
+    let currentSpinResults = [];
+
+    function openRoulette() {
+      spinning = false; currentAngle = 0;
+      currentSpinResults = [];
+      document.getElementById('inputForm').style.display = 'block';
+      document.getElementById('resultPanel').style.display = 'none';
+      // Restaura visibilidade dos campos que podem ter sido ocultados no 2º giro
+      document.querySelectorAll('#inputForm .form-group, #inputForm .checkbox-wrap').forEach(function (el) { el.style.display = ''; });
+      var _h2 = document.querySelector('#formSection > h2');
+      var _desc = document.querySelector('#formSection > .desc');
+      if (_h2) _h2.style.display = '';
+      if (_desc) _desc.style.display = '';
+      var _iform = document.getElementById('inputForm');
+      _iform.style.justifyContent = ''; _iform.style.alignItems = ''; _iform.style.minHeight = '';
+      document.getElementById('emailInput').value = '';
+      document.getElementById('phoneInput').value = '';
+      document.getElementById('privacyCheck').checked = false;
+      document.getElementById('copyHint').textContent = 'Clique no cupom para copiar';
+      document.getElementById('copyHint').style.color = '';
+      const btn = document.getElementById('spinBtn');
+      btn.disabled = false;
+      btn.textContent = 'ARROCHAAAA!';
+      document.getElementById('overlay').style.display = 'flex';
+      drawWheel(0);
+      startCountdown();
+    }
+
+    function startCountdown() {
+      clearInterval(countdownInterval);
+      let secs = 900;
+      const el = document.getElementById('rouletteTimer');
+      countdownInterval = setInterval(() => {
+        if (secs <= 0) { el.textContent = 'Cabou-se!'; clearInterval(countdownInterval); return; }
+        const m = Math.floor(secs / 60), s = secs % 60;
+        el.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+        secs--;
+      }, 1000);
+    }
+
+    function drawWheel(angle) {
+      const canvas = document.getElementById('wheelCanvas');
+      const ctx = canvas.getContext('2d');
+      const cx = canvas.width / 2, cy = canvas.height / 2, r = cx - 4;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI); ctx.fillStyle = '#1a1c1c'; ctx.fill();
+      for (let i = 0; i < NUM; i++) {
+        const start = angle + i * ARC, end = start + ARC, seg = ROULETTE_SEGMENTS[i];
+        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r - 5, start, end); ctx.closePath();
+        ctx.fillStyle = seg.color; ctx.fill();
+        ctx.strokeStyle = '#1a1c1c'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.save(); ctx.translate(cx, cy); ctx.rotate(start + ARC / 2);
+        ctx.textAlign = 'right'; ctx.fillStyle = seg.textColor;
+        ctx.font = 'bold 11px Segoe UI, Arial, sans-serif';
+        const lines = seg.label.split('\n');
+        const lh = 13, sy = -(lines.length - 1) * lh / 2;
+        lines.forEach((line, li) => ctx.fillText(line, r - 16, sy + li * lh));
+        ctx.restore();
+      }
+      ctx.beginPath(); ctx.arc(cx, cy, r - 3, 0, 2 * Math.PI); ctx.strokeStyle = '#f4760f'; ctx.lineWidth = 5; ctx.stroke();
+    }
+
+    function weightedRandom() {
+      const total = ROULETTE_WEIGHTS.reduce((a, b) => a + b, 0);
+      let rnd = Math.random() * total;
+      for (let i = 0; i < ROULETTE_WEIGHTS.length; i++) { rnd -= ROULETTE_WEIGHTS[i]; if (rnd <= 0) return i; }
+      return ROULETTE_WEIGHTS.length - 1;
+    }
+
+    function spinTo(idx, onDone) {
+      const fullRot = (5 + Math.floor(Math.random() * 4)) * 2 * Math.PI;
+      const targetAngle = -(Math.PI / 2) - (idx * ARC + ARC / 2);
+      const norm = ((targetAngle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+      const cur = ((currentAngle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+      const total = fullRot + norm - cur;
+      const startA = currentAngle, endA = startA + total;
+      const duration = 4500 + Math.random() * 1000;
+      const t0 = performance.now();
+      const easeOut = t => 1 - Math.pow(1 - t, 4);
+      function frame(now) {
+        const t = Math.min((now - t0) / duration, 1);
+        currentAngle = startA + (endA - startA) * easeOut(t);
+        drawWheel(currentAngle);
+        if (t < 1) requestAnimationFrame(frame);
+        else { currentAngle = endA; spinning = false; onDone(idx); }
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function getSegmentIndexByApiResult(sd) {
+      if (!sd.success) return null;
+      if (sd.coupon_code) {
+        var idx = ROULETTE_SEGMENTS.findIndex(function (s) { return s.coupon === sd.coupon_code; });
+        if (idx >= 0) return idx;
+        console.error("[spin mismatch] Cupom retornado pela API não existe em SEGMENTS:", sd.coupon_code, sd);
+        return null;
+      }
+      var noLuckIdx = ROULETTE_SEGMENTS.findIndex(function (s) { return !s.coupon && /SEM|SORTE/i.test(s.label); });
+      if (noLuckIdx >= 0) return noLuckIdx;
+      return null;
+    }
+
+    async function handleSpin() {
+      if (spinning) return;
+      if (!currentCanSpin) { alert('Ops! Complete o quiz primeiro.'); return; }
+      if (currentSpinsUsed >= currentSpinsAllowed) { alert('Você já usou todos os giros disponíveis.'); return; }
+      spinning = true;
+      const btn = document.getElementById('spinBtn');
+      btn.disabled = true; btn.textContent = 'Processando...';
+
+      // Coletar dados do formulário (sempre necessário para salvar o lead)
+      const email = document.getElementById('emailInput').value.trim();
+      const phone = document.getElementById('phoneInput').value.trim();
+      const checked = document.getElementById('privacyCheck').checked;
+      if (!email || !/\S+@\S+\.\S+/.test(email)) {
+        alert('Por favor, insira um e-mail válido.');
+        spinning = false; btn.disabled = false; btn.textContent = 'ARROCHAAAA!'; return;
+      }
+      if (!phone || phone.replace(/\D/g, '').length < 10) {
+        alert('Por favor, insira um telefone válido com DDD.');
+        spinning = false; btn.disabled = false; btn.textContent = 'ARROCHAAAA!'; return;
+      }
+      if (!checked) {
+        alert('Você precisa aceitar a Política de Privacidade.');
+        spinning = false; btn.disabled = false; btn.textContent = 'ARROCHAAAA!'; return;
+      }
+
+      // Bloquear giro sem resultado do quiz
+      if (!currentQuizResultId) {
+        alert('Resultado do quiz não encontrado. Jogue novamente.');
+        spinning = false; btn.disabled = false;
+        btn.textContent = currentSpinsUsed === 0 ? 'ARROCHAAAA!' : 'GIRAR ' + (currentSpinsUsed + 1) + 'º GIRO';
+        return;
+      }
+
+      // Salvar lead se ainda não foi salvo nesta sessão
+      if (!currentLeadId) {
+        try {
+          const leadRes = await fetch('/api/lead', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, phone, quiz_result_id: currentQuizResultId, consent_accepted: checked })
+          });
+          const leadData = await leadRes.json();
+          if (leadData.success) {
+            currentLeadId = leadData.lead_id;
+          } else {
+            alert('Não foi possível salvar seus dados. Tente novamente.');
+            spinning = false; btn.disabled = false;
+            btn.textContent = currentSpinsUsed === 0 ? 'ARROCHAAAA!' : 'GIRAR ' + (currentSpinsUsed + 1) + 'º GIRO';
+            return;
+          }
+        } catch (e) {
+          alert('Não foi possível salvar seus dados. Tente novamente.');
+          spinning = false; btn.disabled = false;
+          btn.textContent = currentSpinsUsed === 0 ? 'ARROCHAAAA!' : 'GIRAR ' + (currentSpinsUsed + 1) + 'º GIRO';
+          return;
+        }
+      }
+
+      let apiData;
+      try {
+        const spinRes = await fetch('/api/spin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lead_id: currentLeadId, quiz_result_id: currentQuizResultId })
+        });
+        apiData = await spinRes.json();
+        if (!apiData.success) {
+          alert(apiData.message || 'Não foi possível girar a roleta.');
+          spinning = false; btn.disabled = false;
+          btn.textContent = currentSpinsUsed === 0 ? 'ARROCHAAAA!' : 'GIRAR ' + (currentSpinsUsed + 1) + 'º GIRO';
+          return;
+        }
+      } catch (e) {
+        alert('Erro de conexão. Tente novamente.');
+        spinning = false; btn.disabled = false;
+        btn.textContent = currentSpinsUsed === 0 ? 'ARROCHAAAA!' : 'GIRAR ' + (currentSpinsUsed + 1) + 'º GIRO';
+        return;
+      }
+      console.log("[spin result]", apiData);
+      const targetIdx = getSegmentIndexByApiResult(apiData);
+      console.log("[target segment]", targetIdx, targetIdx !== null ? ROULETTE_SEGMENTS[targetIdx] : null);
+      if (targetIdx === null) {
+        spinning = false;
+        btn.disabled = false;
+        btn.textContent = currentSpinsUsed === 0 ? 'ARROCHAAAA!' : 'GIRAR ' + (currentSpinsUsed + 1) + 'º GIRO';
+        alert('O prêmio retornado não está configurado na roleta. Avise a equipe da campanha.');
+        return;
+      }
+      btn.textContent = 'Girando...';
+      spinTo(targetIdx, function () { showRouletteResult(apiData); });
+    }
+
+    function showRouletteResult(apiData) {
+      currentSpinsUsed++;
+      currentSpinResults.push({ spinNum: currentSpinsUsed, coupon: apiData.coupon_code || null, reward: apiData.reward_name || null });
+      document.getElementById('inputForm').style.display = 'none';
+      document.getElementById('resultPanel').style.display = 'block';
+      if (!apiData.coupon_code) {
+        document.getElementById('noLuckMsg').style.display = 'block';
+        document.getElementById('winMsg').style.display = 'none';
+      } else {
+        document.getElementById('noLuckMsg').style.display = 'none';
+        document.getElementById('winMsg').style.display = 'block';
+        document.getElementById('couponBox').textContent = apiData.coupon_code;
+      }
+      renderSpinHistory();
+      const remaining = currentSpinsAllowed - currentSpinsUsed;
+      const againBtn = document.querySelector('#resultPanel .again-btn');
+      if (remaining > 0) {
+        againBtn.style.display = '';
+        againBtn.textContent = '↵ USAR ' + (currentSpinsUsed + 1) + 'º GIRO';
+      } else {
+        againBtn.style.display = 'none';
+      }
+    }
+
+    function renderSpinHistory() {
+      var existing = document.getElementById('spinHistoryList');
+      if (existing) existing.remove();
+      if (currentSpinResults.length <= 1) return;
+      var list = document.createElement('div');
+      list.id = 'spinHistoryList';
+      list.style.cssText = 'margin-top:12px;padding:8px 12px;background:rgba(0,0,0,.25);border-radius:8px;font-size:13px;text-align:left;';
+      currentSpinResults.forEach(function (r) {
+        var line = document.createElement('div');
+        line.style.cssText = 'padding:3px 0;color:#fff;';
+        if (r.coupon) {
+          line.innerHTML = '<strong>Giro ' + r.spinNum + ':</strong> ' + (r.reward || r.coupon) + ' — <span style="color:#FFD700;font-weight:700;">' + r.coupon + '</span>';
+        } else {
+          line.innerHTML = '<strong>Giro ' + r.spinNum + ':</strong> <span style="color:#ff6b6b;">Sem sorte dessa vez</span>';
+        }
+        list.appendChild(line);
+      });
+      document.getElementById('resultPanel').appendChild(list);
+    }
+
+    function copyCoupon() {
+      navigator.clipboard.writeText(document.getElementById('couponBox').textContent)
+        .then(() => { document.getElementById('copyHint').textContent = '✓ Copiado!'; document.getElementById('copyHint').style.color = '#80a700'; })
+        .catch(() => { });
+    }
+
+    function resetRouletteForm() {
+      const remaining = currentSpinsAllowed - currentSpinsUsed;
+      if (remaining <= 0) {
+        alert('Você já usou todos os giros disponíveis.');
+        return;
+      }
+      spinning = false;
+      document.getElementById('resultPanel').style.display = 'none';
+      document.getElementById('inputForm').style.display = 'block';
+      document.getElementById('copyHint').textContent = 'Clique no cupom para copiar';
+      document.getElementById('copyHint').style.color = '';
+      const btn = document.getElementById('spinBtn');
+      btn.disabled = false;
+      if (currentLeadId) {
+        // Lead já salvo — ocultar campos de formulário, H1 e subtítulo; mostrar só botão centralizado
+        document.querySelectorAll('#inputForm .form-group, #inputForm .checkbox-wrap').forEach(function (el) { el.style.display = 'none'; });
+        btn.textContent = (currentSpinsUsed + 1) + '° GIRO';
+        var h2El = document.querySelector('#formSection > h2');
+        var descEl = document.querySelector('#formSection > .desc');
+        if (h2El) h2El.style.display = 'none';
+        if (descEl) descEl.style.display = 'none';
+        var inputFormEl = document.getElementById('inputForm');
+        inputFormEl.style.display = 'flex';
+        inputFormEl.style.justifyContent = 'center';
+        inputFormEl.style.alignItems = 'center';
+        inputFormEl.style.minHeight = '250px';
+      } else {
+        document.querySelectorAll('#inputForm .form-group, #inputForm .checkbox-wrap').forEach(function (el) { el.style.display = ''; });
+        btn.textContent = 'ARROCHAAAA!';
+      }
+    }
+
+    function closeModal() {
+      clearInterval(countdownInterval);
+      const overlay = document.getElementById('overlay');
+      overlay.style.animation = 'ge-fadeIn .3s ease reverse';
+      setTimeout(() => { overlay.style.display = 'none'; overlay.style.animation = ''; }, 280);
+    }
+
+    document.getElementById('phoneInput').addEventListener('input', function (e) {
+      let v = e.target.value.replace(/\D/g, '');
+      if (v.length > 11) v = v.slice(0, 11);
+      if (v.length <= 10) v = v.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+      else v = v.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+      e.target.value = v;
+    });
+
+    showScreen('screen-start');
+    drawWheel(0);
+
+    // ============================================================
+    //  FULLSCREEN
+    //  Desktop → botão no embed → Fullscreen API nativa do browser
+    //  Mobile  → automático ao clicar SIMBORA → pseudo-fullscreen CSS
+    //            + screen.orientation.lock('landscape') quando disponível
+    //            + aviso "gire o celular" se ainda em portrait
+    // ============================================================
+
+    /* ── Utilitários ── */
+
+    function isMobile() {
+      return window.matchMedia('(pointer: coarse)').matches;
+    }
+
+    function hasFullscreenApi() {
+      var d = document.documentElement;
+      return !!(d.requestFullscreen || d.webkitRequestFullscreen || d.mozRequestFullScreen || d.msRequestFullscreen);
+    }
+
+    function requestNativeFullscreen() {
+      var el = document.documentElement;
+      var fn = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+      if (fn) return fn.call(el);
+      return Promise.reject(new Error('no-api'));
+    }
+
+    function exitNativeFullscreen() {
+      var active = document.fullscreenElement || document.webkitFullscreenElement
+                || document.mozFullScreenElement || document.msFullscreenElement;
+      if (!active) return;
+      var fn = document.exitFullscreen || document.webkitExitFullscreen
+             || document.mozCancelFullScreen || document.msExitFullscreen;
+      if (fn) fn.call(document);
+    }
+
+    var _orientationLocked = false;
+    function lockLandscape() {
+      try {
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock('landscape').then(function () {
+            _orientationLocked = true;
+          }).catch(function () { _orientationLocked = false; });
+        }
+      } catch (e) { _orientationLocked = false; }
+    }
+
+    function unlockOrientation() {
+      try {
+        if (_orientationLocked && screen.orientation && screen.orientation.unlock) {
+          screen.orientation.unlock();
+          _orientationLocked = false;
+        }
+      } catch (e) {}
+    }
+
+    /* ── Estado ── */
+    var _desktopFs = false;  // fullscreen nativo ativo no desktop
+    var _mobileFs  = false;  // pseudo-fullscreen ativo no mobile
+
+    /* ── Botão desktop: atualiza ícone ── */
+    function updateFullscreenBtn() {
+      var btn       = document.getElementById('ge-btn-fullscreen');
+      var iconEnter = document.getElementById('ge-fs-icon-enter');
+      var iconExit  = document.getElementById('ge-fs-icon-exit');
+      if (!btn) return;
+      if (_desktopFs) {
+        iconEnter.style.display = 'none';
+        iconExit.style.display  = '';
+        btn.title = 'Sair da tela cheia';
+        btn.setAttribute('aria-label', 'Sair da tela cheia');
+      } else {
+        iconEnter.style.display = '';
+        iconExit.style.display  = 'none';
+        btn.title = 'Tela cheia';
+        btn.setAttribute('aria-label', 'Entrar em tela cheia');
+      }
+    }
+
+    /* ── DESKTOP: toggle fullscreen via botão no embed ── */
+    function toggleFullscreen() {
+      if (_desktopFs) {
+        /* Sair */
+        _desktopFs = false;
+        document.body.classList.remove('ge-desktop-fs');
+        exitNativeFullscreen();
+        updateFullscreenBtn();
+      } else {
+        /* Entrar — só Fullscreen API, sem pseudo-fullscreen no desktop */
+        _desktopFs = true;
+        document.body.classList.add('ge-desktop-fs');
+        if (hasFullscreenApi()) {
+          requestNativeFullscreen().catch(function () {
+            /* Permissão negada ou contexto inseguro — reverte */
+            _desktopFs = false;
+            document.body.classList.remove('ge-desktop-fs');
+            updateFullscreenBtn();
+          });
+        }
+        updateFullscreenBtn();
+      }
+    }
+
+    /* ── MOBILE: aviso "gire o celular" ── */
+    var _rotateHintShown  = false;
+    var _hintDismissTimer = null;
+
+    function showRotateHint() {
+      if (_rotateHintShown) return;          // já visível — não duplica
+      var hint = document.getElementById('ge-rotate-hint');
+      if (!hint) return;
+      _rotateHintShown = true;
+      hint.classList.remove('fading');
+      hint.classList.add('visible');
+      clearTimeout(_hintDismissTimer);
+      _hintDismissTimer = setTimeout(dismissRotateHint, 4000);
+    }
+
+    function dismissRotateHint() {
+      clearTimeout(_hintDismissTimer);
+      var hint = document.getElementById('ge-rotate-hint');
+      if (!hint || !_rotateHintShown) return;
+      hint.classList.add('fading');
+      setTimeout(function () {
+        hint.classList.remove('visible', 'fading');
+        _rotateHintShown = false;
+      }, 500);
+    }
+
+    function checkRotateHint() {
+      if (!_mobileFs || !isMobile()) return;
+      var isPortrait = window.matchMedia('(orientation: portrait)').matches;
+      if (isPortrait) {
+        showRotateHint();                    // mostra sempre que voltar ao portrait
+      } else {
+        if (_rotateHintShown) dismissRotateHint();
+      }
+    }
+
+    window.addEventListener('orientationchange', function () {
+      setTimeout(checkRotateHint, 150); // aguarda o browser concluir a rotação
+    });
+    window.addEventListener('resize', checkRotateHint);
+
+    /* ── MOBILE: entrar em pseudo-fullscreen ── */
+    function enterMobileFullscreen() {
+      _mobileFs        = true;
+      _rotateHintShown = false;
+      clearTimeout(_hintDismissTimer);
+      document.body.classList.add('ge-pseudo-fullscreen');
+      /* Tenta native fullscreen (Android Chrome) + lock landscape */
+      if (hasFullscreenApi()) {
+        requestNativeFullscreen().then(function () {
+          lockLandscape();
+        }).catch(function () {
+          /* iOS ou contexto inseguro — tenta orientation lock direto se disponível */
+          lockLandscape();
+        });
+      } else {
+        /* Sem Fullscreen API (iOS Safari) — tenta orientation lock diretamente */
+        lockLandscape();
+      }
+      /* Aguarda o fullscreen + orientation lock estabilizarem antes de checar */
+      setTimeout(checkRotateHint, 700);
+    }
+
+    /* ── MOBILE: sair do pseudo-fullscreen ── */
+    function exitMobileFullscreen() {
+      _mobileFs = false;
+      document.body.classList.remove('ge-pseudo-fullscreen');
+      clearTimeout(_hintDismissTimer);
+      var hint = document.getElementById('ge-rotate-hint');
+      if (hint) hint.classList.remove('visible', 'fading');
+      _rotateHintShown = false;
+      unlockOrientation();
+      exitNativeFullscreen();
+    }
+
+    /* ── Intercepta startGame: mobile entra em fullscreen ao clicar SIMBORA ── */
+    var _origStartGame = startGame;
+    startGame = async function () {
+      if (isMobile() && !_mobileFs) {
+        enterMobileFullscreen();
+      }
+      return _origStartGame();
+    };
+
+    /* ── Intercepta exitGame: mobile sai do fullscreen ao clicar SAIR ── */
+    var _origExitGame = exitGame;
+    exitGame = function () {
+      if (_mobileFs) exitMobileFullscreen();
+      _origExitGame();
+    };
+
+    /* ── Listener: browser saiu do fullscreen nativo (Esc / botão nativo) ── */
+    function onFullscreenChange() {
+      var active = !!(document.fullscreenElement || document.webkitFullscreenElement
+                   || document.mozFullScreenElement || document.msFullscreenElement);
+      if (!active) {
+        /* Desktop: sincroniza estado */
+        if (_desktopFs) {
+          _desktopFs = false;
+          document.body.classList.remove('ge-desktop-fs');
+          updateFullscreenBtn();
+        }
+        /* Mobile: se saiu pelo botão nativo do browser (Android), remove pseudo-fs */
+        if (_mobileFs) {
+          exitMobileFullscreen();
+        }
+      }
+    }
+
+    document.addEventListener('fullscreenchange',       onFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+    document.addEventListener('mozfullscreenchange',    onFullscreenChange);
+    document.addEventListener('MSFullscreenChange',     onFullscreenChange);
+
+    /* ── Tecla Esc: sai também do pseudo-fullscreen mobile ── */
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        if (_desktopFs) {
+          _desktopFs = false;
+          document.body.classList.remove('ge-desktop-fs');
+          updateFullscreenBtn();
+          /* exitNativeFullscreen é chamado pelo browser automaticamente no Esc */
+        }
+        if (_mobileFs) exitMobileFullscreen();
+      }
+    });
+
+  </script>
+
+  <!-- ── AVISO "GIRE O CELULAR" (mobile iOS fallback) ───────────────── -->
+  <div id="ge-rotate-hint" role="alertdialog" aria-live="polite">
+    <svg class="hint-phone" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+      <line x1="12" y1="18" x2="12.01" y2="18"/>
+    </svg>
+    <p>Vira o celular na horizontal!</p>
+    <span>O jogo fica muito melhor em paisagem 😄</span>
+  </div>
+
+  <!-- ── BOTÃO FLUTUANTE: COMPRAR INGRESSOS ───────────────────────────── -->
+  <a href="https://ingressos.aguascorrentes.com.br/calendario?_gl=1*1qczsui*_gcl_au*MTI1ODM1MzQzMy4xNzc5MzI3NzQ2*_ga*ODI3ODEzNTg5LjE3NzkzMjc3NDY.*_ga_408694W0YC*czE3Nzk0MTQwNDgkbzQkZzAkdDE3Nzk0MTQwNTIkajU2JGwwJGgxOTkzMDkwNjUz"
+    target="_blank" rel="noopener noreferrer" class="fab-ticket" aria-label="Comprar Ingressos">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v1a2 2 0 0 0 0 4v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-1a2 2 0 0 0 0-4Z" />
+      <line x1="9" y1="7" x2="9" y2="17" stroke-dasharray="2 2" />
+    </svg>
+  </a>
+
+  <style>
+    .fab-ticket {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9990;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      background: #f4760f;
+      color: #fff;
+      border-radius: 50%;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .35), 0 2px 6px rgba(244, 118, 15, .5);
+      text-decoration: none;
+      transition: transform .2s ease, box-shadow .2s ease;
+      border: 2px solid #9a4600;
+    }
+
+    .fab-ticket svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .fab-ticket:hover {
+      transform: scale(1.1) translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .4), 0 4px 10px rgba(244, 118, 15, .6);
+    }
+
+    .fab-ticket:active {
+      transform: scale(.95);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+    }
+
+    @media (max-width: 480px) {
+      .fab-ticket {
+        bottom: 18px;
+        right: 18px;
+        width: 52px;
+        height: 52px;
+      }
+
+      .fab-ticket svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  </style>
+</body>
+
+</html>
