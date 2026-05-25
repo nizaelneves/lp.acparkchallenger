@@ -1,0 +1,1 @@
+from roleta_app import app
