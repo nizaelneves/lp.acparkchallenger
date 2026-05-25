@@ -44,6 +44,21 @@ def home():
     return send_from_directory(".", "index.html")
 
 
+@app.route("/assets/<path:filename>")
+def serve_assets(filename):
+    return send_from_directory("assets", filename)
+
+
+@app.route("/css/<path:filename>")
+def serve_css(filename):
+    return send_from_directory("css", filename)
+
+
+@app.route("/js/<path:filename>")
+def serve_js(filename):
+    return send_from_directory("js", filename)
+
+
 def calculate_result(correct_answers, total_questions):
     score = correct_answers * 100
 
